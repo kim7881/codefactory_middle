@@ -1,4 +1,5 @@
 import 'package:codefactory/common/component/custom_text_form_field.dart';
+import 'package:codefactory/common/view/splash_screen.dart';
 import 'package:codefactory/user/view/login_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,7 @@ class _App extends StatelessWidget {
         fontFamily: 'NotoSans'
       ),
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      home: SplashScreen(),
     );
   }
 }
