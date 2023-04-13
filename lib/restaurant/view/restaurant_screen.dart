@@ -1,4 +1,5 @@
 import 'package:codefactory/common/dio/dio.dart';
+import 'package:codefactory/common/model/cursor_pagination_model.dart';
 import 'package:codefactory/restaurant/component/restaurant_card.dart';
 import 'package:codefactory/restaurant/model/restaurant_model.dart';
 import 'package:codefactory/restaurant/repository/restaurant_repository.dart';
@@ -12,26 +13,26 @@ import '../../common/const/data.dart';
 class RestaurantScreen extends ConsumerWidget {
   const RestaurantScreen({Key? key}) : super(key: key);
 
-  Future<List<RestaurantModel>> paginateRestaurant(WidgetRef ref) async {
-    final dio = ref.watch(dioProvider);
-
-    final resp = await RestaurantRepository(dio, baseUrl: 'http://$ip/restaurant')
-    .paginate();
-
-    // final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-    //
-    // final resp = await dio.get(
-    //   'http://$ip/restaurant',
-    //   options: Options(
-    //     headers: {
-    //       'authorization': 'Bearer $accessToken',
-    //     },
-    //   ),
-    // );
-    //
-    // return resp.data['data'];
-    return resp.data;
-  }
+  // Future<List<RestaurantModel>> paginateRestaurant(WidgetRef ref) async {
+  //   final dio = ref.watch(dioProvider);
+  //
+  //   final resp = await RestaurantRepository(dio, baseUrl: 'http://$ip/restaurant')
+  //   .paginate();
+  //
+  //   // final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+  //   //
+  //   // final resp = await dio.get(
+  //   //   'http://$ip/restaurant',
+  //   //   options: Options(
+  //   //     headers: {
+  //   //       'authorization': 'Bearer $accessToken',
+  //   //     },
+  //   //   ),
+  //   // );
+  //   //
+  //   // return resp.data['data'];
+  //   return resp.data;
+  // }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,17 +40,17 @@ class RestaurantScreen extends ConsumerWidget {
       child: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: FutureBuilder<List<RestaurantModel>>(
-            future: paginateRestaurant(ref),
-            builder: (context, AsyncSnapshot<List<RestaurantModel>> snapshot) {
+          child: FutureBuilder<CursorPagination<RestaurantModel>>(
+            future: ref.watch(restaurantRepositoryProvider).paginate(),
+            builder: (context, AsyncSnapshot<CursorPagination<RestaurantModel>> snapshot) {
               if (!snapshot.hasData) {
                 return CircularProgressIndicator();
               }
 
               return ListView.separated(
-                itemCount: snapshot.data!.length,
+                itemCount: snapshot.data!.data.length,
                 itemBuilder: (_, index) {
-                  final pItem = snapshot.data![index];
+                  final pItem = snapshot.data!.data[index];
                   // final pItem = RestaurantModel.fromJson(item);
 
                   return GestureDetector(
