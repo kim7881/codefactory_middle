@@ -11,45 +11,63 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../common/const/data.dart';
 
-class RestaurantScreen extends ConsumerWidget {
+class RestaurantScreen extends ConsumerStatefulWidget {
   const RestaurantScreen({Key? key}) : super(key: key);
 
-  // Future<List<RestaurantModel>> paginateRestaurant(WidgetRef ref) async {
-  //   final dio = ref.watch(dioProvider);
-  //
-  //   final resp = await RestaurantRepository(dio, baseUrl: 'http://$ip/restaurant')
-  //   .paginate();
-  //
-  //   // final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-  //   //
-  //   // final resp = await dio.get(
-  //   //   'http://$ip/restaurant',
-  //   //   options: Options(
-  //   //     headers: {
-  //   //       'authorization': 'Bearer $accessToken',
-  //   //     },
-  //   //   ),
-  //   // );
-  //   //
-  //   // return resp.data['data'];
-  //   return resp.data;
-  // }
+  @override
+  ConsumerState<RestaurantScreen> createState() => _RestaurantScreenState();
+}
+
+class _RestaurantScreenState extends ConsumerState<RestaurantScreen> {
+  final ScrollController controller = ScrollController();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    super.initState();
+
+    controller.addListener(scrollListener);
+  }
+
+  void scrollListener(){
+    // 현재 위치가
+    // 최대 길이보다 조금 덜되는 위치까지 왔다면
+    // 새로운 데이터를 추가요청
+    if(controller.offset > controller.position.maxScrollExtent - 300){
+      ref.read(restaurantProvider.notifier).paginate(
+        fetchMore: true,
+      );
+    }
+  }
+
+  // Future<List<RestaurantModel>> paginateRestaurant(WidgetRef ref) async {
+  @override
+  Widget build(BuildContext context) {
     final data = ref.watch(restaurantProvider);
 
+    // 완전 처음 로딩일 때
     if(data is CursorPaginationLoading){
       return Center(
         child: CircularProgressIndicator(),
       );
     }
 
+    // 에러
+    if(data is CursorPaginationError){
+      return Center(
+        child: Text(data.message),
+      );
+    }
+
+    // CursorPagination
+    // CursorPaginationFetchingMore
+    // CursorPaginationRefetching
+
     final cp = data as CursorPagination;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: ListView.separated(
+        controller: controller,
         itemCount: cp.data.length,
         itemBuilder: (_, index) {
           final pItem = cp.data[index];
