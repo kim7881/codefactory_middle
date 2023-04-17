@@ -11,7 +11,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RestaurantDetailScreen extends ConsumerWidget {
+class RestaurantDetailScreen extends ConsumerStatefulWidget {
   final String id;
 
   const RestaurantDetailScreen({
@@ -19,26 +19,23 @@ class RestaurantDetailScreen extends ConsumerWidget {
     required this.id,
   }) : super(key: key);
 
-  // Future<RestaurantDetailModel> getRestaurantDetail(WidgetRef ref) async {
-  //   return ref.watch(restaurantRepositoryProvider).getRestaurantDetail(
-  //         id: id,
-  //       );
-  //   // final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-  //   //
-  //   // final resp = await dio.get(
-  //   //   'http://$ip/restaurant/$id',
-  //   //   options: Options(
-  //   //     headers: {
-  //   //       'authorization': 'Bearer $accessToken',
-  //   //     },
-  //   //   ),
-  //   // );
-  //   // return resp.data;
-  // }
+  @override
+  ConsumerState<RestaurantDetailScreen> createState() => _RestaurantDetailScreenState();
+}
+
+class _RestaurantDetailScreenState extends ConsumerState<RestaurantDetailScreen> {
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(restaurantDetailProvider(id));
+  void initState() {
+    super.initState();
+
+    ref.read(restaurantProvider.notifier).getDetail(id: widget.id);
+  }
+
+  // Future<RestaurantDetailModel> getRestaurantDetail(WidgetRef ref) async {
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(restaurantDetailProvider(widget.id));
 
     if (state == null) {
       return DefaultLayout(
@@ -53,8 +50,10 @@ class RestaurantDetailScreen extends ConsumerWidget {
       child: CustomScrollView(
         slivers: [
           renderTop(model: state),
-          // renderLabel(),
-          // renderProducts(products: snapshot.data!.products),
+          if(state is RestaurantDetailModel)
+            renderLabel(),
+          if(state is RestaurantDetailModel)
+            renderProducts(products: state.products),
         ],
       ),
     );
