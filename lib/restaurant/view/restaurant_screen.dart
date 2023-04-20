@@ -1,17 +1,8 @@
 import 'package:codefactory/common/component/pagination_list_view.dart';
-import 'package:codefactory/common/dio/dio.dart';
-import 'package:codefactory/common/model/cursor_pagination_model.dart';
-import 'package:codefactory/common/utils/pagination_utils.dart';
 import 'package:codefactory/restaurant/component/restaurant_card.dart';
-import 'package:codefactory/restaurant/model/restaurant_model.dart';
 import 'package:codefactory/restaurant/provider/restaurant_provider.dart';
-import 'package:codefactory/restaurant/repository/restaurant_repository.dart';
 import 'package:codefactory/restaurant/view/restaurant_detail_screen.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../common/const/data.dart';
 
 // class RestaurantScreen extends ConsumerStatefulWidget {
 //   const RestaurantScreen({Key? key}) : super(key: key);
@@ -20,7 +11,7 @@ import '../../common/const/data.dart';
 //   ConsumerState<RestaurantScreen> createState() => _RestaurantScreenState();
 // }
 
-class RestaurantScreenState extends StatelessWidget {
+class RestaurantScreen extends StatelessWidget {
 
   // final ScrollController controller = ScrollController();
 
