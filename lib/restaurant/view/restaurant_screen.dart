@@ -1,3 +1,4 @@
+import 'package:codefactory/common/component/pagination_list_view.dart';
 import 'package:codefactory/common/dio/dio.dart';
 import 'package:codefactory/common/model/cursor_pagination_model.dart';
 import 'package:codefactory/common/utils/pagination_utils.dart';
@@ -12,28 +13,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../common/const/data.dart';
 
-class RestaurantScreen extends ConsumerStatefulWidget {
-  const RestaurantScreen({Key? key}) : super(key: key);
+// class RestaurantScreen extends ConsumerStatefulWidget {
+//   const RestaurantScreen({Key? key}) : super(key: key);
+//
+//   @override
+//   ConsumerState<RestaurantScreen> createState() => _RestaurantScreenState();
+// }
 
-  @override
-  ConsumerState<RestaurantScreen> createState() => _RestaurantScreenState();
-}
+class RestaurantScreenState extends StatelessWidget {
 
-class _RestaurantScreenState extends ConsumerState<RestaurantScreen> {
-  final ScrollController controller = ScrollController();
+  // final ScrollController controller = ScrollController();
 
-  @override
-  void initState() {
-    super.initState();
+  // @override
+  // void initState() {
+  //   super.initState();
+  //
+  //   controller.addListener(scrollListener);
+  // }
 
-    controller.addListener(scrollListener);
-  }
-
-  void scrollListener() {
-    PaginationUtils.paginate(
-      controller: controller,
-      provider: ref.read(restaurantProvider.notifier),
-    );
+  // void scrollListener() {
+  //   PaginationUtils.paginate(
+  //     controller: controller,
+  //     provider: ref.read(restaurantProvider.notifier),
+  //   );
     // // 현재 위치가
     // // 최대 길이보다 조금 덜되는 위치까지 왔다면
     // // 새로운 데이터를 추가요청
@@ -42,73 +44,93 @@ class _RestaurantScreenState extends ConsumerState<RestaurantScreen> {
     //         fetchMore: true,
     //       );
     // }
-  }
+  // }
 
   // Future<List<RestaurantModel>> paginateRestaurant(WidgetRef ref) async {
   @override
   Widget build(BuildContext context) {
-    final data = ref.watch(restaurantProvider);
-
-    // 완전 처음 로딩일 때
-    if (data is CursorPaginationLoading) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-
-    // 에러
-    if (data is CursorPaginationError) {
-      return Center(
-        child: Text(data.message),
-      );
-    }
-
-    // CursorPagination
-    // CursorPaginationFetchingMore
-    // CursorPaginationRefetching
-
-    final cp = data as CursorPagination;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: ListView.separated(
-        controller: controller,
-        itemCount: cp.data.length + 1,
-        itemBuilder: (_, index) {
-          if (index == cp.data.length) {
-            return Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Center(
-                child: data is CursorPaginationFetchingMore
-                    ? CircularProgressIndicator()
-                    : Text('마지막 데이터입니다 ㅠㅠ'),
+    return PaginationListView(
+      provider: restaurantProvider,
+      itemBuilder: <RestaurantModel>(_, index, model){
+        return GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => RestaurantDetailScreen(
+                  id: model.id,
+                ),
               ),
             );
-          }
-
-          final pItem = cp.data[index];
-          // final pItem = RestaurantModel.fromJson(item);
-
-          return GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => RestaurantDetailScreen(
-                    id: pItem.id,
-                  ),
-                ),
-              );
-            },
-            child: RestaurantCard.fromModel(
-              model: pItem,
-            ),
-          );
-        },
-        separatorBuilder: (_, index) {
-          return SizedBox(height: 16.0);
-        },
-      ),
+          },
+          child: RestaurantCard.fromModel(
+            model: model,
+          ),
+        );
+      },
     );
+
+    // final data = ref.watch(restaurantProvider);
+    //
+    // // 완전 처음 로딩일 때
+    // if (data is CursorPaginationLoading) {
+    //   return Center(
+    //     child: CircularProgressIndicator(),
+    //   );
+    // }
+    //
+    // // 에러
+    // if (data is CursorPaginationError) {
+    //   return Center(
+    //     child: Text(data.message),
+    //   );
+    // }
+    //
+    // // CursorPagination
+    // // CursorPaginationFetchingMore
+    // // CursorPaginationRefetching
+    //
+    // final cp = data as CursorPagination;
+    //
+    // return Padding(
+    //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    //   child: ListView.separated(
+    //     controller: controller,
+    //     itemCount: cp.data.length + 1,
+    //     itemBuilder: (_, index) {
+    //       if (index == cp.data.length) {
+    //         return Padding(
+    //           padding:
+    //               const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+    //           child: Center(
+    //             child: data is CursorPaginationFetchingMore
+    //                 ? CircularProgressIndicator()
+    //                 : Text('마지막 데이터입니다 ㅠㅠ'),
+    //           ),
+    //         );
+    //       }
+    //
+    //       final pItem = cp.data[index];
+    //       // final pItem = RestaurantModel.fromJson(item);
+    //
+    //       return GestureDetector(
+    //         onTap: () {
+    //           Navigator.of(context).push(
+    //             MaterialPageRoute(
+    //               builder: (_) => RestaurantDetailScreen(
+    //                 id: pItem.id,
+    //               ),
+    //             ),
+    //           );
+    //         },
+    //         child: RestaurantCard.fromModel(
+    //           model: pItem,
+    //         ),
+    //       );
+    //     },
+    //     separatorBuilder: (_, index) {
+    //       return SizedBox(height: 16.0);
+    //     },
+    //   ),
+    // );
   }
 }
