@@ -1,5 +1,9 @@
+import 'package:codefactory/common/view/root_tab.dart';
+import 'package:codefactory/common/view/splash_screen.dart';
+import 'package:codefactory/restaurant/view/restaurant_detail_screen.dart';
 import 'package:codefactory/user/model/user_model.dart';
 import 'package:codefactory/user/provider/user_me_provider.dart';
+import 'package:codefactory/user/view/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -20,6 +24,32 @@ class AuthProvider extends ChangeNotifier {
       }
     });
   }
+
+  List<GoRoute> get routes => [
+        GoRoute(
+          path: '/',
+          name: RootTab.routeName,
+          builder: (_, __) => RootTab(),
+          routes: [
+            GoRoute(
+              path: 'restaurant/:rid',
+              builder: (_, state) => RestaurantDetailScreen(
+                id: state.params['rid']!,
+              ),
+            )
+          ],
+        ),
+        GoRoute(
+          path: '/splash',
+          name: SplashScreen.routeName,
+          builder: (_, __) => SplashScreen(),
+        ),
+        GoRoute(
+          path: '/login',
+          name: LoginScreen.routeName,
+          builder: (_, __) => LoginScreen(),
+        ),
+      ];
 
   // SplashScreen
   // 앱을 처음 시작했을때
@@ -49,7 +79,7 @@ class AuthProvider extends ChangeNotifier {
     }
 
     // UserModelError
-    if(user is UserModelError){
+    if (user is UserModelError) {
       return logginIn ? '/login' : null;
     }
 
