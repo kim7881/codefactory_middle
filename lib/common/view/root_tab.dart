@@ -2,6 +2,7 @@ import 'package:codefactory/common/const/colors.dart';
 import 'package:codefactory/common/layout/default_layout.dart';
 import 'package:codefactory/product/view/product_screen.dart';
 import 'package:codefactory/restaurant/view/restaurant_screen.dart';
+import 'package:codefactory/user/view/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class RootTab extends StatefulWidget {
@@ -50,7 +51,7 @@ class _RootTabState extends State<RootTab> with TickerProviderStateMixin{
           RestaurantScreen(),
           ProductScreen(),
           Center(child: Container(child: Text('주문'))),
-          Center(child: Container(child: Text('프로필'))),
+          ProfileScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
