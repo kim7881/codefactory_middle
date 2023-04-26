@@ -3,6 +3,7 @@ import 'package:codefactory/restaurant/component/restaurant_card.dart';
 import 'package:codefactory/restaurant/provider/restaurant_provider.dart';
 import 'package:codefactory/restaurant/view/restaurant_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 // class RestaurantScreen extends ConsumerStatefulWidget {
 //   const RestaurantScreen({Key? key}) : super(key: key);
@@ -12,7 +13,6 @@ import 'package:flutter/material.dart';
 // }
 
 class RestaurantScreen extends StatelessWidget {
-
   // final ScrollController controller = ScrollController();
 
   // @override
@@ -27,14 +27,14 @@ class RestaurantScreen extends StatelessWidget {
   //     controller: controller,
   //     provider: ref.read(restaurantProvider.notifier),
   //   );
-    // // 현재 위치가
-    // // 최대 길이보다 조금 덜되는 위치까지 왔다면
-    // // 새로운 데이터를 추가요청
-    // if (controller.offset > controller.position.maxScrollExtent - 300) {
-    //   ref.read(restaurantProvider.notifier).paginate(
-    //         fetchMore: true,
-    //       );
-    // }
+  // // 현재 위치가
+  // // 최대 길이보다 조금 덜되는 위치까지 왔다면
+  // // 새로운 데이터를 추가요청
+  // if (controller.offset > controller.position.maxScrollExtent - 300) {
+  //   ref.read(restaurantProvider.notifier).paginate(
+  //         fetchMore: true,
+  //       );
+  // }
   // }
 
   // Future<List<RestaurantModel>> paginateRestaurant(WidgetRef ref) async {
@@ -42,16 +42,22 @@ class RestaurantScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return PaginationListView(
       provider: restaurantProvider,
-      itemBuilder: <RestaurantModel>(_, index, model){
+      itemBuilder: <RestaurantModel>(_, index, model) {
         return GestureDetector(
           onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => RestaurantDetailScreen(
-                  id: model.id,
-                ),
-              ),
+            context.goNamed(
+              RestaurantDetailScreen.routeName,
+              params: {
+                'rid': model.id,
+              }
             );
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (_) => RestaurantDetailScreen(
+            //       id: model.id,
+            //     ),
+            //   ),
+            // );
           },
           child: RestaurantCard.fromModel(
             model: model,

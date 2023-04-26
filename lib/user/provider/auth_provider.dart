@@ -33,6 +33,7 @@ class AuthProvider extends ChangeNotifier {
           routes: [
             GoRoute(
               path: 'restaurant/:rid',
+              name: RestaurantDetailScreen.routeName,
               builder: (_, state) => RestaurantDetailScreen(
                 id: state.params['rid']!,
               ),
@@ -76,6 +77,7 @@ class AuthProvider extends ChangeNotifier {
     // 홈으로 이동
     if (user is UserModel) {
       return logginIn || state.location == '/splash' ? '/' : null;
+      // return logginIn ? '/' : null;
     }
 
     // UserModelError

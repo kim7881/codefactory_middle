@@ -5,6 +5,7 @@ import 'package:codefactory/product/provider/product_provider.dart';
 import 'package:codefactory/restaurant/view/restaurant_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 // class ProductScreen extends ConsumerStatefulWidget {
 //   const ProductScreen({Key? key}) : super(key: key);
@@ -23,13 +24,19 @@ class ProductScreen extends StatelessWidget {
       itemBuilder: <ProductModel>(_, index, model) {
         return GestureDetector(
           onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => RestaurantDetailScreen(
-                  id: model.restaurant.id,
-                ),
-              ),
+            context.goNamed(
+              RestaurantDetailScreen.routeName,
+              params: {
+                'rid': model.restaurant.id,
+              }
             );
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (_) => RestaurantDetailScreen(
+            //       id: model.restaurant.id,
+            //     ),
+            //   ),
+            // );
           },
           child: ProductCard.fromProductModel(
             model: model,
