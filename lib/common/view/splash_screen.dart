@@ -18,7 +18,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // }
 
 class SplashScreen extends ConsumerWidget {
-  const SplashScreen({super.key});
+  // const SplashScreen({super.key});
 
   // @override
   // void initState() {

@@ -12,7 +12,7 @@ final userMeProvider = StateNotifierProvider<UserMeStateNotifier, UserModelBase?
     final authRepository = ref.watch(authRepositoryProvider);
     final userMeRepository = ref.watch(userMeRepositoryProvider);
     final storage = ref.watch(secureStorageProvider);
-    
+
     return UserMeStateNotifier(
       authRepository: authRepository,
       repository: userMeRepository,
@@ -40,7 +40,7 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
 
     if (refreshToken == null || accessToken == null) {
-      state == null;
+      state = null;
       return;
     }
 
