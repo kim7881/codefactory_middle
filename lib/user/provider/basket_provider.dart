@@ -40,6 +40,8 @@ class BasketProvider extends StateNotifier<List<BasketItemModel>> {
 
   Future<void> removeFromBasket({
     required ProductModel product,
+    // true면 count와 관계없이 아예 삭제한다
+    bool isDelete = false,
   }) async {
     // 1) 장바구니에 상품이 존재할때는
     //    1) 상품의 카운트가 1보다 크면 -1한다.
@@ -56,7 +58,7 @@ class BasketProvider extends StateNotifier<List<BasketItemModel>> {
 
     final existingProduct = state.firstWhere((e) => e.product.id == product.id);
 
-    if (existingProduct.count == 1) {
+    if (existingProduct.count == 1 || isDelete) {
       state = state
           .where(
             (e) => e.product.id != product.id,
