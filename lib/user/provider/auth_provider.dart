@@ -1,5 +1,6 @@
 import 'package:codefactory/common/view/root_tab.dart';
 import 'package:codefactory/common/view/splash_screen.dart';
+import 'package:codefactory/restaurant/view/basket_screen.dart';
 import 'package:codefactory/restaurant/view/restaurant_detail_screen.dart';
 import 'package:codefactory/user/model/user_model.dart';
 import 'package:codefactory/user/provider/user_me_provider.dart';
@@ -37,8 +38,13 @@ class AuthProvider extends ChangeNotifier {
               builder: (_, state) => RestaurantDetailScreen(
                 id: state.params['rid']!,
               ),
-            )
+            ),
           ],
+        ),
+        GoRoute(
+          path: '/basket',
+          name: BasketScreen.routeName,
+          builder: (_, state) => BasketScreen(),
         ),
         GoRoute(
           path: '/splash',
@@ -52,7 +58,7 @@ class AuthProvider extends ChangeNotifier {
         ),
       ];
 
-  void logout(){
+  void logout() {
     ref.read(userMeProvider.notifier).logout();
     // notifyListeners();
   }
