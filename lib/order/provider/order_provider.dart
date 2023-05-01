@@ -16,10 +16,8 @@ final orderProvider =
   },
 );
 
-class OrderStateNotifier extends PaginationProvider<
-  OrderModel,
-OrderRepository
-> {
+class OrderStateNotifier
+    extends PaginationProvider<OrderModel, OrderRepository> {
   final Ref ref;
 
   OrderStateNotifier({
@@ -28,7 +26,7 @@ OrderRepository
   });
 
   Future<bool> postOrder() async {
-    try{
+    try {
       final uuid = Uuid();
 
       final id = uuid.v4();
@@ -41,21 +39,21 @@ OrderRepository
           products: state
               .map(
                 (e) => PostOrderBodyProduct(
-              productId: e.product.id,
-              count: e.count,
-            ),
-          )
+                  productId: e.product.id,
+                  count: e.count,
+                ),
+              )
               .toList(),
           totalPrice: state.fold<int>(
             0,
-                (p, n) => p + (n.count * n.product.price),
+            (p, n) => p + (n.count * n.product.price),
           ),
           createdAt: DateTime.now().toString(),
         ),
       );
 
       return true;
-    }catch(e){
+    } catch (e) {
       return false;
     }
   }

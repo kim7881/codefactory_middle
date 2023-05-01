@@ -49,7 +49,7 @@ class OrderModel implements IModelWithId {
   final int totalPrice;
   final RestaurantModel restaurant;
   @JsonKey(
-    fromJson: DataUtils.StringToDateTime,
+    fromJson: DataUtils.stringToDateTime,
   )
   final DateTime createdAt;
 

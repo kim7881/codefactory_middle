@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:codefactory/common/const/data.dart';
 
+
 class DataUtils{
-  static DateTime StringToDateTime(String value){
+  static DateTime stringToDateTime(String value){
     return DateTime.parse(value);
   }
 
